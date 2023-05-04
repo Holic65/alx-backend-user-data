@@ -3,6 +3,7 @@
 This module contains the authentication blueprint"""
 from flask import request
 from typing import List, TypeVar
+import os
 
 
 class Auth():
@@ -20,15 +21,6 @@ class Auth():
                 continue
             if path.startswith(excluded_path[:-1]):
                 return False
-        # if path[-1] != '/':
-        #     path += '/'
-        # if path in excluded_paths:
-        #     return False
-        # for excluded_path in excluded_paths:
-        #     if excluded_path[-1] != '*':
-        #         continue
-        #     if path.startswith(excluded_path[:-1]):
-        #         return False
         return True
 
     def authorization_header(self, request=None) -> str:
@@ -42,3 +34,10 @@ class Auth():
     def current_user(self, request=None) -> TypeVar('User'):
         """current_user"""
         return None
+
+    def session_cookie(self, request=None):
+        """Session cooke"""
+        if request is None:
+            return None
+        session_id = os.getenv("SESSION_NAME")
+        return request.cookies.get(session_id)
